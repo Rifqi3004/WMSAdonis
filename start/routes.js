@@ -18,3 +18,5 @@ const Route = use('Route')
 
 Route.on('/').render('welcome')
 Route.get('/ikan', 'IkanController.index');
+Route.get('/chart','IkanController.chart')
+Route.get('/table','IkanController.table')

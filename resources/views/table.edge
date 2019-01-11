@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {{ style('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css') }}
+    {{ style('https://use.fontawesome.com/releases/v5.6.3/css/all.css') }}
+    <style>
+        .judul{
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-align: center
+        }
+
+        @media only screen and (max-width: 600px) {
+            .app{
+                font-size: 12px
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container app">
+        <div class="judul">
+            <h5>
+                Water Monitoring
+            </h5>
+            <h5>Data Table</h5>
+        </div>
+        <div class="table-responsive-sm">
+                <table class="table table-striped">
+                        <thead style="background-color : #d3c206">
+                            <tr>
+                            <th scope="col">Time</th>
+                            <th scope="col">Water PH</th>
+                            <th scope="col">Temperatur</th>
+                            <th scope="col">Height</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @each(item in ikan.rows)               
+                           <tr>
+                                <td>{{ item.waktu }}</td>
+                                <td>{{ item.ph }}</td>
+                                <td>{{ item.suhu }}</td>
+                                <td> {{ item.tinggi }} </td>
+                            </tr>
+                           @else 
+                            <tr>
+                                <td>
+                                    not found
+                                </td>
+                            </tr>
+                           @endeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td align="right"><a href="{{ ikan.prevUrl }}" style="font-size:18"><i class="fas fa-angle-double-left"></i></a></td>
+                                <td colspan="2" align="center">  
+                                    Page <b>{{ ikan.page }}</b> to <b>{{ikan.lastPage}}</b>
+                                </td>
+                                <td align="left"><a href="{{ ikan.nextUrl }}" style="font-size:18"><i class="fas fa-angle-double-right"></i></a></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+        </div>
+        <div style="margin-top : 30px">
+            <h4>Informasi : </h4>
+            <p style="text-align: justify; text-indent: 0.5in;">
+                PH meter adalah sebuah alat elektronik yang berfungsi untuk mengukur pH (derajat keasaman atau kebasaan) suatu cairan (ada elektroda khusus yang berfungsi untuk mengukur pH bahan-bahan semi-padat). 
+                Sebuah pH meter terdiri dari sebuah elektroda (probe pengukur) yang terhubung ke sebuah alat elektronik yang mengukur dan menampilkan nilai pH. alat ini sangat berguna untuk industri air minum, laboratorium, akuarium, industri pakaian terutama batik dan pewarna pakaian 
+                (wikipedia)
+            </p>
+            <p style="text-align: justify; text-indent: 0.5in;">
+                Elektrode adalah konduktor yang digunakan untuk bersentuhan dengan bagian atau media non-logam dari sebuah sirkuit (misal semikonduktor, elektrolit atau vakum). Ungkapan kata ini diciptakan oleh ilmuwan Michael Faraday dari bahasa Yunani elektron (berarti amber, dan hodos sebuah cara). 
+                (wikipedia)
+            </p>
+        </div>
+    </div>
+    
+</body>
+</html>
