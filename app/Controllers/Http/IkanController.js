@@ -9,11 +9,73 @@ const Ikan = use('App/Models/Ikan')
  * Resourceful controller for interacting with ikans
  */
 class IkanController {
+  async getData({request}){
+    
+    const pages = request.input('page')
+    const limits = request.input('limit')
+    var page = 1
 
+    var limit = 3
+
+    if (pages != null) {
+        page = pages
+    }
+    if (limits != null) {
+        limit = limits
+    }
+    const ikan = await Ikan.query().paginate(page,limit)
+    var next = parseInt(page) + 1
+    var prev = page - 1
+    if (prev < 1) {
+        prev = 1
+    }
+
+    if (next > ikan.pages.lastPage) {
+        next = ikan.pages.lastPage
+    }
+   
+    
+    var waktu = [];
+    var suhu = [];
+    var ph = [];
+    var tinggi = [];
+    await ikan.rows.map(item => {
+        waktu.push(item.waktu)
+        suhu.push(item.suhu)
+        ph.push(item.ph)
+        tinggi.push(item.tinggi)
+    })
+    
+
+    const data = {
+      nextUrl: 'http://localhost:3333/table?page=' + next,
+      prevUrl: 'http://localhost:3333/table?page=' + prev,
+      page: ikan.pages.page,
+      total: ikan.pages.total,
+      perPage: ikan.pages.perPage,
+      lastPage: ikan.pages.lastPage,
+      waktu, suhu, ph, tinggi
+    }
+    // return view.render('chart',{data})
+    return data
+  }
   async chart({response, view}){
-    const ikan = await Ikan.all();
-
-    return view.render('chart',{ikan})
+    // const ikan = await Ikan.all();
+    // var waktu = [];
+    // var suhu = [];
+    // var ph = [];
+    // var tinggi = [];
+    // await ikan.rows.map(item => {
+    //     waktu.push(item.waktu)
+    //     suhu.push(item.suhu)
+    //     ph.push(item.ph)
+    //     tinggi.push(item.tinggi)
+    // })
+    // var data = {
+    //     waktu, suhu, ph, tinggi
+    // }
+    return view.render('chart')
+    // return data
   }
 
   async table({response, request, view}){

@@ -28,7 +28,8 @@
     "@adonisjs/shield": "^1.0.8",
     "chart.js": "^2.7.3",
     "mysql": "^2.16.0",
-    "mysql2": "^1.6.4"
+    "mysql2": "^1.6.4",
+    "react-chartjs-2": "^2.7.4"
   },
   "devDependencies": {},
   "autoload": {
