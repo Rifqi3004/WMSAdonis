@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head>  
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    {{ script('https://unpkg.com/axios/dist/axios.min.js') }}
+<script>
+  var ikan = [];
+  axios.get('http://localhost:3333/data').then((res) => {
+			ikan.push(res.data.data2)
+			// console.log(res.data.data2)
+		}).then(() => {
+      var chart = new CanvasJS.Chart("chartContainer", {
+      animationEnabled: true,
+      title:{
+        text: "WMS"
+      },
+      axisX: {
+        valueFormatString: "DD MMM,YY"
+      },
+      axisY: {
+        title: "nilai",
+        includeZero: false,
+        suffix: ""
+      },
+      legend:{
+        cursor: "pointer",
+        fontSize: 16,
+        itemclick: toggleDataSeries
+      },
+      toolTip:{
+        shared: true
+      },
+      data: [{
+        name: "Suhu",
+        type: "spline",
+        yValueFormatString: "",
+        showInLegend: true,
+        dataPoints: ikan[0].suhu2
+      },
+      {
+        name: "Ph",
+        type: "spline",
+        yValueFormatString: "",
+        showInLegend: true,
+        dataPoints: ikan[0].ph2
+      },
+      {
+        name: "Tinggi",
+        type: "spline",
+        yValueFormatString: "",
+        showInLegend: true,
+        dataPoints: ikan[0].tinggi2
+      }]
+    });
+    chart.render();
+
+    function toggleDataSeries(e){
+      if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      }
+      else{
+        e.dataSeries.visible = true;
+      }
+      chart.render();
+    }
+
+    })
+</script>
+</head>
+<body style="background-color : #93B2D6">
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+
+</body>
+</html>

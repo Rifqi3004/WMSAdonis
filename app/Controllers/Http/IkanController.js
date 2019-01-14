@@ -1,5 +1,6 @@
 'use strict'
 const Ikan = use('App/Models/Ikan') 
+const Env = use('Env')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -9,13 +10,12 @@ const Ikan = use('App/Models/Ikan')
  * Resourceful controller for interacting with ikans
  */
 class IkanController {
-  async getData({request}){
-    
+  async getData({request}){    
     const pages = request.input('page')
     const limits = request.input('limit')
     var page = 1
 
-    var limit = 3
+    var limit = 4
 
     if (pages != null) {
         page = pages
@@ -40,16 +40,37 @@ class IkanController {
     var ph = [];
     var tinggi = [];
     await ikan.rows.map(item => {
-        waktu.push(item.waktu)
-        suhu.push(item.suhu)
-        ph.push(item.ph)
-        tinggi.push(item.tinggi)
+        const date = new Date(item.waktu)
+        waktu.push(date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear())
+        suhu.push(parseFloat(item.suhu))
+        ph.push(parseFloat(item.ph))
+        tinggi.push(parseFloat(item.tinggi))
     })
-    
+    var suhu2 = [];
+    var ph2 = [];
+    var tinggi2 = [];
+    await ikan.rows.map(item => {
+        
+        const date = new Date(item.waktu)
+        const tgl = date
+       
+        suhu2.push({x:tgl, y:parseFloat(item.suhu)})
+        ph2.push({x:tgl, y:parseFloat(item.ph)})
+        tinggi2.push({x : tgl,y : parseFloat(item.tinggi)})
+    })
 
+    const data2 = {
+        nextUrl: Env.get('APP_URL')+'/table?page=' + next,
+        prevUrl: Env.get('APP_URL')+'/table?page=' + prev,
+        page: ikan.pages.page,
+        total: ikan.pages.total,
+        perPage: ikan.pages.perPage,
+        lastPage: ikan.pages.lastPage,
+         suhu2, ph2, tinggi2
+    }
     const data = {
-      nextUrl: 'http://localhost:3333/table?page=' + next,
-      prevUrl: 'http://localhost:3333/table?page=' + prev,
+      nextUrl: Env.get('APP_URL')+'/table?page=' + next,
+      prevUrl: Env.get('APP_URL')+'/table?page=' + prev,
       page: ikan.pages.page,
       total: ikan.pages.total,
       perPage: ikan.pages.perPage,
@@ -74,7 +95,7 @@ class IkanController {
     // var data = {
     //     waktu, suhu, ph, tinggi
     // }
-    return view.render('chart')
+    return view.render('chart2')
     // return data
   }
 
@@ -104,8 +125,8 @@ class IkanController {
 
     
     const data = {
-      nextUrl: 'http://localhost:3333/table?page=' + next,
-      prevUrl: 'http://localhost:3333/table?page=' + prev,
+      nextUrl: Env.get('APP_URL')+'/table?page=' + next,
+      prevUrl: Env.get('APP_URL')+'/table?page=' + prev,
       page: ikan.pages.page,
       total: ikan.pages.total,
       perPage: ikan.pages.perPage,
@@ -127,20 +148,15 @@ class IkanController {
    * @param {View} ctx.view
    */
   async index ({request}) {
-    const pages = request.input('page')
-    const limits = request.input('limit')
-    var page = 1
+    const ikan = await Ikan.all()
+    const getph = await Ikan.query().getAvg('ph')
+    const ph =  parseFloat(getph).toFixed(1)
+    const getsuhu = await Ikan.query().getAvg('suhu')
+    const suhu = parseFloat(getsuhu).toFixed(1)
+    const gettinggi = await Ikan.query().getAvg('tinggi')
+    const tinggi = parseFloat(gettinggi).toFixed(1)
 
-    var limit = 5
-
-    if (pages != null) {
-        page = pages
-    }
-    if (limits != null) {
-        limit = limits
-    }
-    const ikan = await Ikan.query().paginate(page,limit)
-    return ikan
+    return {ikan, ph, suhu, tinggi}
   }
 
   /**
