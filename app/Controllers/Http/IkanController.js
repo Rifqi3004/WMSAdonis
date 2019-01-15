@@ -60,8 +60,8 @@ class IkanController {
     })
 
     const data2 = {
-        nextUrl: Env.get('APP_URL')+'/table?page=' + next,
-        prevUrl: Env.get('APP_URL')+'/table?page=' + prev,
+        nextUrl: Env.get('APP_URL')+'/data?page=' + next,
+        prevUrl: Env.get('APP_URL')+'/data?page=' + prev,
         page: ikan.pages.page,
         total: ikan.pages.total,
         perPage: ikan.pages.perPage,
@@ -69,8 +69,8 @@ class IkanController {
          suhu2, ph2, tinggi2
     }
     const data = {
-      nextUrl: Env.get('APP_URL')+'/table?page=' + next,
-      prevUrl: Env.get('APP_URL')+'/table?page=' + prev,
+      nextUrl: Env.get('APP_URL')+'/data?page=' + next,
+      prevUrl: Env.get('APP_URL')+'/data?page=' + prev,
       page: ikan.pages.page,
       total: ikan.pages.total,
       perPage: ikan.pages.perPage,
